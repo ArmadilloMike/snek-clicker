@@ -15,7 +15,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill("white")
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill((100,100,100))
 
     snek = draw_snek(screen)
 
