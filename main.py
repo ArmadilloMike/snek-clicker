@@ -22,6 +22,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and snek.collidepoint(event.pos):
+                scales += 1
+                print(scales)
+
     background = pygame.Surface(screen.get_size())
     background = background.convert()
     background.fill((100,100,100))
@@ -29,13 +34,6 @@ while running:
 
     snek = draw_snek(screen)
     draw_scales(screen)
-
-    mouse_pressed = pygame.mouse.get_pressed(num_buttons=3) == (True, False, False)
-    mouse_pos = pygame.mouse.get_pos()
-
-    if mouse_pressed and snek.collidepoint(mouse_pos):
-        scales += 1
-        print(scales)
 
     pygame.display.flip()
 
