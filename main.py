@@ -8,9 +8,9 @@ scales = 0
 font = pygame.font.Font(None, 64)
 
 # Shop stuff
-SHOP_X = 50
+SHOP_X = 850
 SHOP_START_Y = 100
-ITEM_W, ITEM_H = 300, 50
+ITEM_W, ITEM_H = 400, 50
 ITEM_GAP = 10
 shop_items = []
 
@@ -36,7 +36,7 @@ def draw_shop(surface, font):
         label = font.render(f"{item['name']} - {item['cost']}", True, (255,255,255))
         surface.blit(label, (item["rect"].x + 10, item["rect"].centery - label.get_height() // 2))
 
-add_shop_item("more oney", 50)
+add_shop_item("more money", 50)
 
 while running:
     for event in pygame.event.get():
