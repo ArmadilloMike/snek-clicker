@@ -24,12 +24,19 @@ def draw_scales(screen, font):
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
+def add_shop_item(name, cost):
+    y = SHOP_START_Y + len(shop_items) * (ITEM_H + ITEM_GAP)
+    rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
+    shop_items.append({"name": name, "cost": cost, "rect": rect})
+
 def draw_shop(surface, font):
     for item in shop_items:
         color = (80,160,255)
         pygame.draw.rect(surface, color, item["rect"])
         label = font.render(f"{item['name']} - {item['cost']}", True, (255,255,255))
         surface.blit(label, (item["rect"].x + 10, item["rect"].centery - label.get_height() // 2))
+
+add_shop_item("more oney", 50)
 
 while running:
     for event in pygame.event.get():
