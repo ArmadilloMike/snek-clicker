@@ -5,6 +5,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 scales = 0
+click_amount = 1
 font = pygame.font.Font(None, 64)
 
 # Shop stuff
@@ -12,6 +13,7 @@ SHOP_X = 850
 SHOP_START_Y = 100
 ITEM_W, ITEM_H = 400, 50
 ITEM_GAP = 10
+last_used_id = 0
 shop_items = []
 
 def draw_snek(surface):
@@ -24,10 +26,12 @@ def draw_scales(screen, font):
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
-def add_shop_item(name, cost):
+def add_shop_item(name, cost, last_used_id):
     y = SHOP_START_Y + len(shop_items) * (ITEM_H + ITEM_GAP)
     rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
-    shop_items.append({"name": name, "cost": cost, "rect": rect})
+    id = last_used_id + 1
+    last_used_id += 1
+    shop_items.append({"name": name, "cost": cost, "rect": rect, "id": id})
 
 def draw_shop(surface, font):
     for item in shop_items:
@@ -36,7 +40,13 @@ def draw_shop(surface, font):
         label = font.render(f"{item['name']} - {item['cost']}", True, (255,255,255))
         surface.blit(label, (item["rect"].x + 10, item["rect"].centery - label.get_height() // 2))
 
-add_shop_item("more money", 50)
+def get_click_item(pos):
+    for item in shop_items:
+        if item["rect"].collidepoint(pos):
+            return item
+    return None
+
+add_shop_item("more money", 50, last_used_id)
 
 while running:
     for event in pygame.event.get():
@@ -45,8 +55,14 @@ while running:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and snek.collidepoint(event.pos):
-                scales += 1
+                scales += click_amount
                 print(scales)
+            item = get_click_item(event.pos)
+            if item and scales >= item["cost"]:
+                scales -= item["cost"]
+                if item["id"] == 1:
+                    click_amount += 1
+                print(f"bought {item['name']}")
 
     background = pygame.Surface(screen.get_size())
     background = background.convert()
