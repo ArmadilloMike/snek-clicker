@@ -20,9 +20,9 @@ def draw_snek(surface):
     pygame.draw.rect(surface, (50, 200, 100), pygame.Rect(300, 220, 40, 40))
     return pygame.Rect(300,220,40,40)
 
-def draw_scales(screen, font):
+def draw_text(screen, font):
     if pygame.font:
-        text = font.render(f"Scales: {scales}", True, (0,0,0))
+        text = font.render(f"Scales: {scales} - CP: {click_amount}", True, (0,0,0))
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
@@ -70,7 +70,7 @@ while running:
     screen.blit(background, (0,0))
 
     snek = draw_snek(screen)
-    draw_scales(screen, font)
+    draw_text(screen, font)
     draw_shop(screen, font)
 
     pygame.display.flip()
