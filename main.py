@@ -80,10 +80,11 @@ while running:
                 if item["id"] == 1:
                     click_amount += 1
                 elif item["id"] == 2:
-                    auto_click += 1
+                    auto_click += 0.1
                 print(f"bought {item['name']}")
         if event.type == AUTO_CLICK_EVENT:
             scales += auto_click
+            scales = round(scales, 1)
             print(f"{auto_click}, {scales}")
 
     background = pygame.Surface(screen.get_size())
