@@ -18,8 +18,8 @@ shop_items = []
 
 # auto click
 auto_click = 0
-CLICK_EVENT = pygame.USEREVENT + 1
-pygame.time.set_timer(CLICK_EVENT, 1000)
+AUTO_CLICK_EVENT = pygame.USEREVENT + 1
+pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 
 def draw_snek(surface):
     pygame.draw.rect(surface, (50, 200, 100), pygame.Rect(300, 220, 40, 40))
@@ -31,7 +31,8 @@ def draw_text(screen, font):
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
-def add_shop_item(name, cost, uses, last_used_id):
+def add_shop_item(name, cost, uses):
+    global last_used_id
     y = SHOP_START_Y + len(shop_items) * (ITEM_H + ITEM_GAP)
     rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
     id = last_used_id + 1
@@ -56,7 +57,8 @@ def update_shop():
         y = SHOP_START_Y + index * (ITEM_H + ITEM_GAP)
         item["rect"].y = y
 
-add_shop_item("more money", 50, 2, last_used_id)
+add_shop_item("more money", 50, 2,)
+add_shop_item("+1 auto click", 1, 10)
 
 while running:
     for event in pygame.event.get():
@@ -77,9 +79,12 @@ while running:
 
                 if item["id"] == 1:
                     click_amount += 1
+                elif item["id"] == 2:
+                    auto_click += 1
                 print(f"bought {item['name']}")
-        if event.type == CLICK_EVENT:
+        if event.type == AUTO_CLICK_EVENT:
             scales += auto_click
+            print(f"{auto_click}, {scales}")
 
     background = pygame.Surface(screen.get_size())
     background = background.convert()
