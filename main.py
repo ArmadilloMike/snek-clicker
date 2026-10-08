@@ -16,13 +16,18 @@ ITEM_GAP = 10
 last_used_id = 0
 shop_items = []
 
+# auto click
+auto_click = 0
+CLICK_EVENT = pygame.USEREVENT + 1
+pygame.time.set_timer(CLICK_EVENT, 1000)
+
 def draw_snek(surface):
     pygame.draw.rect(surface, (50, 200, 100), pygame.Rect(300, 220, 40, 40))
     return pygame.Rect(300,220,40,40)
 
 def draw_text(screen, font):
     if pygame.font:
-        text = font.render(f"Scales: {scales} - CP: {click_amount}", True, (0,0,0))
+        text = font.render(f"Scales: {scales} - CP: {click_amount} - Auto Click: {auto_click}", True, (0,0,0))
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
@@ -73,6 +78,8 @@ while running:
                 if item["id"] == 1:
                     click_amount += 1
                 print(f"bought {item['name']}")
+        if event.type == CLICK_EVENT:
+            scales += auto_click
 
     background = pygame.Surface(screen.get_size())
     background = background.convert()
