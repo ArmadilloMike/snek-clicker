@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # pygame setup
 pygame.init()
@@ -23,6 +24,11 @@ shop_items = []
 auto_click = 0
 AUTO_CLICK_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
+
+# bonus stuff
+golden = 0
+SPAWN_BONUS_SCALE = pygame.USEREVENT + 1
+pygame.time.set_timer(SPAWN_BONUS_SCALE, 2000)
 
 # draw functions
 def draw_snek(surface):
@@ -55,6 +61,11 @@ def update_shop():
     for index, item in enumerate(shop_items):
         y = SHOP_START_Y + index * (ITEM_H + ITEM_GAP)
         item["rect"].y = y
+def draw_scale(surface, gold, x, y):
+    if gold:
+        pygame.draw.rect(surface, (190, 210, 15), pygame.Rect(x, y, 40, 40))
+    else:
+        pygame.draw.rect(surface, (40, 135, 5), pygame.Rect(x, y, 40, 40))
 
 # shop items
 add_shop_item("more money", 50, 2,)
@@ -103,6 +114,11 @@ while running:
     snek = draw_snek(screen)
     draw_text(screen, font)
     draw_shop(screen, font)
+
+    #scale
+    scale_x = random.randint(0, 1280 - 40)
+    scale_y = random.randint(0, 720 - 40)
+    draw_scale(screen, False, scale_x, scale_y)
 
     pygame.display.flip()
     clock.tick(60)
