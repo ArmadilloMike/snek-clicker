@@ -26,12 +26,12 @@ def draw_text(screen, font):
         textpos = text.get_rect(centerx=screen.get_width() / 2, y=10)
         screen.blit(text, textpos)
 
-def add_shop_item(name, cost, last_used_id):
+def add_shop_item(name, cost, uses, last_used_id):
     y = SHOP_START_Y + len(shop_items) * (ITEM_H + ITEM_GAP)
     rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
     id = last_used_id + 1
     last_used_id += 1
-    shop_items.append({"name": name, "cost": cost, "rect": rect, "id": id})
+    shop_items.append({"name": name, "cost": cost, "rect": rect, "uses": uses, "id": id})
 
 def draw_shop(surface, font):
     for item in shop_items:
@@ -46,7 +46,12 @@ def get_click_item(pos):
             return item
     return None
 
-add_shop_item("more money", 50, last_used_id)
+def update_shop():
+    for index, item in enumerate(shop_items):
+        y = SHOP_START_Y + index * (ITEM_H + ITEM_GAP)
+        item["rect"].y = y
+
+add_shop_item("more money", 50, 2, last_used_id)
 
 while running:
     for event in pygame.event.get():
@@ -60,6 +65,11 @@ while running:
             item = get_click_item(event.pos)
             if item and scales >= item["cost"]:
                 scales -= item["cost"]
+                item["uses"] -= 1
+                if item['uses'] <= 0:
+                    shop_items.remove(item)
+                    update_shop()
+
                 if item["id"] == 1:
                     click_amount += 1
                 print(f"bought {item['name']}")
