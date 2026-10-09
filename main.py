@@ -28,8 +28,12 @@ pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 # bonus stuff
 golden = 0
 SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
-pygame.time.set_timer(SPAWN_BONUS_SCALE, 2000)
 bonus_scales = []
+def schedule_scale_spawn():
+    delay = random.randint(2000, 6000)
+    pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
+
+schedule_scale_spawn()
 
 # draw functions
 def draw_snek(surface):
@@ -122,6 +126,7 @@ while running:
             golden += 1
             if golden > 5:
                 golden = 0
+            schedule_scale_spawn()
 
     # create background
     background = pygame.Surface(screen.get_size())
