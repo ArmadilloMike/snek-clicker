@@ -27,8 +27,9 @@ pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 
 # bonus stuff
 golden = 0
-SPAWN_BONUS_SCALE = pygame.USEREVENT + 1
+SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
 pygame.time.set_timer(SPAWN_BONUS_SCALE, 2000)
+bonus_scales = []
 
 # draw functions
 def draw_snek(surface):
@@ -62,14 +63,16 @@ def update_shop():
         y = SHOP_START_Y + index * (ITEM_H + ITEM_GAP)
         item["rect"].y = y
 def draw_scale(surface, gold, x, y):
-    if gold:
-        pygame.draw.rect(surface, (190, 210, 15), pygame.Rect(x, y, 40, 40))
-    else:
-        pygame.draw.rect(surface, (40, 135, 5), pygame.Rect(x, y, 40, 40))
+    rect = pygame.Rect(x, y, 40, 40)
+    color = (190, 210, 15) if gold else (40, 125, 5)
+    pygame.draw.rect(surface, color, rect)
+    return rect
 
 # shop items
 add_shop_item("more money", 50, 2,)
 add_shop_item("+1 auto click", 1, 10)
+
+snek = draw_snek(screen)
 
 while running:
     for event in pygame.event.get():
@@ -80,6 +83,13 @@ while running:
             if event.button == 1 and snek.collidepoint(event.pos):
                 scales += click_amount
                 print(scales)
+
+            for bonus in list(bonus_scales):
+                if bonus["rect"].collidepoint(event.pos):
+                    if bonus["gold"]: scales += 50
+                    else: scales += 20
+                    bonus_scales.remove(bonus)
+
             item = get_click_item(event.pos)
             if item and scales >= item["cost"]:
                 scales -= item["cost"]
@@ -103,6 +113,15 @@ while running:
             scales += auto_click
             scales = round(scales, 1)
             print(f"{auto_click}, {scales}")
+        # scale
+        if event.type == SPAWN_BONUS_SCALE:
+            scale_x = random.randint(0, 1280 - 40)
+            scale_y = random.randint(0, 720 - 40)
+            gold = golden == 5
+            bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold})
+            golden += 1
+            if golden > 5:
+                golden = 0
 
     # create background
     background = pygame.Surface(screen.get_size())
@@ -112,13 +131,10 @@ while running:
 
     #draw stuff
     snek = draw_snek(screen)
+    for bonus in bonus_scales:
+        draw_scale(screen, bonus["gold"], bonus["rect"].x, bonus["rect"].y)
     draw_text(screen, font)
     draw_shop(screen, font)
-
-    #scale
-    scale_x = random.randint(0, 1280 - 40)
-    scale_y = random.randint(0, 720 - 40)
-    draw_scale(screen, False, scale_x, scale_y)
 
     pygame.display.flip()
     clock.tick(60)
