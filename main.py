@@ -29,6 +29,7 @@ pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 golden = 0
 SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
 bonus_scales = []
+BONUS_SCALE_LIFETIME = 5000
 BONUS_SIZE = 40
 BONUS_MIN_X = 0
 BONUS_MAX_X = SHOP_X - BONUS_SIZE
@@ -127,7 +128,7 @@ while running:
             scale_x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
             scale_y = random.randint(BONUS_MIN_Y, BONUS_MAX_Y)
             gold = golden == 5
-            bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold})
+            bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold, "expires_at": pygame.time.get_ticks() + BONUS_SCALE_LIFETIME})
             golden += 1
             if golden > 5:
                 golden = 0
@@ -138,6 +139,12 @@ while running:
     background = background.convert()
     background.fill((100,100,100))
     screen.blit(background, (0,0))
+
+    # remove bonus scales
+    current_time = pygame.time.get_ticks()
+    for bonus in list(bonus_scales):
+        if current_time >= bonus["expires_at"]:
+            bonus_scales.remove(bonus)
 
     #draw stuff
     snek = draw_snek(screen)
