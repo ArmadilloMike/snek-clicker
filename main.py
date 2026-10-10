@@ -29,6 +29,11 @@ pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 golden = 0
 SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
 bonus_scales = []
+BONUS_SIZE = 40
+BONUS_MIN_X = 0
+BONUS_MAX_X = SHOP_X - BONUS_SIZE
+BONUS_MIN_Y = 60
+BONUS_MAX_Y = 720 - BONUS_SIZE
 def schedule_scale_spawn():
     delay = random.randint(2000, 6000)
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
@@ -119,8 +124,8 @@ while running:
             print(f"{auto_click}, {scales}")
         # scale
         if event.type == SPAWN_BONUS_SCALE:
-            scale_x = random.randint(0, 1280 - 40)
-            scale_y = random.randint(0, 720 - 40)
+            scale_x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
+            scale_y = random.randint(BONUS_MIN_Y, BONUS_MAX_Y)
             gold = golden == 5
             bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold})
             golden += 1
