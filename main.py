@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 import random
 
@@ -92,7 +93,6 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and snek.collidepoint(event.pos):
                 scales += click_amount
-                print(scales)
 
             for bonus in list(bonus_scales):
                 if bonus["rect"].collidepoint(event.pos):
@@ -117,12 +117,10 @@ while running:
                     auto_click += 0.1
                     auto_click = round(auto_click, 1)
 
-                print(f"bought {item['name']}")
         # autoclicking things
         if event.type == AUTO_CLICK_EVENT:
             scales += auto_click
             scales = round(scales, 1)
-            print(f"{auto_click}, {scales}")
         # scale
         if event.type == SPAWN_BONUS_SCALE:
             scale_x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
@@ -130,7 +128,8 @@ while running:
             gold = golden == 5
             bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold, "expires_at": pygame.time.get_ticks() + BONUS_SCALE_LIFETIME})
             golden += 1
-            if golden > 5:
+            since = randint(5,10)
+            if golden >= since:
                 golden = 0
             schedule_scale_spawn()
 
