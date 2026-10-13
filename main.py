@@ -78,10 +78,16 @@ def draw_scale(surface, gold, x, y):
     color = (190, 210, 15) if gold else (40, 125, 5)
     pygame.draw.rect(surface, color, rect)
     return rect
+def draw_ghost_snek(surface):
+    ghost_surface = pygame.Surface((30, 30), pygame.SRCALPHA)
+    pygame.draw.rect(ghost_surface, (180, 255, 200, 100), pygame.Rect(0, 0, 30, 30))
+    surface.blit(ghost_surface, (300, 220))
+    return pygame.Rect(300, 220, 30, 30)
 
 # shop items
-add_shop_item("more money", 50, 2,)
+add_shop_item("+1 cp", 50, 2,)
 add_shop_item("+1 auto click", 1, 10)
+add_shop_item("times 2 cp", 100, 1)
 
 snek = draw_snek(screen)
 
@@ -116,7 +122,8 @@ while running:
                 elif item["id"] == 2:
                     auto_click += 0.1
                     auto_click = round(auto_click, 1)
-
+                elif item["id"] == 3:
+                    click_amount *= 2
         # autoclicking things
         if event.type == AUTO_CLICK_EVENT:
             scales += auto_click
@@ -147,6 +154,7 @@ while running:
 
     #draw stuff
     snek = draw_snek(screen)
+    draw_ghost_snek(screen)
     for bonus in bonus_scales:
         draw_scale(screen, bonus["gold"], bonus["rect"].x, bonus["rect"].y)
     draw_text(screen, font)
