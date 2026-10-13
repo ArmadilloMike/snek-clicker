@@ -40,6 +40,21 @@ def schedule_scale_spawn():
     delay = random.randint(2000, 6000)
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
 
+# ghost snek things
+ghost_sneks = []
+min_x = 0
+max_x = SHOP_X - 1
+min_y = 0
+max_y = 719
+
+def spawn_ghost(x=300, y=220, speed=30, size=30):
+    ghost_sneks.append({"x": float(x), "y": float(y), "speed": float(speed), "size": int(size)})
+def draw_ghost_snek(surface, x, y, size=30):
+    ghost_surface = pygame.Surface((30, 30), pygame.SRCALPHA)
+    pygame.draw.rect(ghost_surface, (180, 255, 200, 100), pygame.Rect(0, 0, 30, 30))
+    surface.blit(ghost_surface, (int(x), int(y)))
+    return pygame.Rect(int(x), int(y), size, size)
+
 schedule_scale_spawn()
 
 # draw functions
@@ -78,11 +93,6 @@ def draw_scale(surface, gold, x, y):
     color = (190, 210, 15) if gold else (40, 125, 5)
     pygame.draw.rect(surface, color, rect)
     return rect
-def draw_ghost_snek(surface):
-    ghost_surface = pygame.Surface((30, 30), pygame.SRCALPHA)
-    pygame.draw.rect(ghost_surface, (180, 255, 200, 100), pygame.Rect(0, 0, 30, 30))
-    surface.blit(ghost_surface, (300, 220))
-    return pygame.Rect(300, 220, 30, 30)
 
 # shop items
 add_shop_item("+1 cp", 50, 2,)
@@ -92,6 +102,7 @@ add_shop_item("times 2 cp", 100, 1)
 snek = draw_snek(screen)
 
 while running:
+    dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -99,6 +110,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and snek.collidepoint(event.pos):
                 scales += click_amount
+                spawn_ghost(randint(min_x, max_x), randint(min_y, max_y), randint(40, 100), randint(15, 30))
 
             for bonus in list(bonus_scales):
                 if bonus["rect"].collidepoint(event.pos):
@@ -154,11 +166,18 @@ while running:
 
     #draw stuff
     snek = draw_snek(screen)
-    draw_ghost_snek(screen)
     for bonus in bonus_scales:
         draw_scale(screen, bonus["gold"], bonus["rect"].x, bonus["rect"].y)
     draw_text(screen, font)
     draw_shop(screen, font)
+
+    # draw ghost sneks
+    for ghost in list(ghost_sneks):
+        ghost["y"] -= ghost["speed"] * dt
+        if ghost["y"] + ghost["size"] <= 0:
+            ghost_sneks.remove(ghost)
+    for ghost in ghost_sneks:
+        draw_ghost_snek(screen, ghost['x'], ghost['y'], ghost['size'])
 
     pygame.display.flip()
     clock.tick(60)
