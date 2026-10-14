@@ -166,6 +166,14 @@ def extract_save_values(state: dict) -> dict:
         "bought_times": bought_times
     }
 
+def build_save_file(scales, click_amount, auto_click, bought_times) -> dict:
+    return {
+        "scales": scales,
+        "click_amount": click_amount,
+        "auto_click": auto_click,
+        "bought_times": {str(k): v for k, v in bought_times.items() if v > 0}
+    }
+
 while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
