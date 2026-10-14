@@ -1,3 +1,7 @@
+import json
+import os
+import sys
+from pathlib import Path
 from random import randint
 import pygame
 import random
@@ -8,6 +12,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 font = pygame.font.Font(None, 64)
+GAME_NAME = "snek-clicker"
 
 # game info
 scales = 0
@@ -100,6 +105,32 @@ add_shop_item("+1 auto click", 1, 10)
 add_shop_item("times 2 cp", 100, 1)
 
 snek = draw_snek(screen)
+
+# save file stuff
+def get_save_dir() -> Path:
+    if sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    elif sys.platform == "darwin":
+        base = Path.home() / "Library" / "Application Support"
+    else:
+        base = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share"))
+    save_dir = base / GAME_NAME
+    save_dir.mkdir(parents=True, exist_ok=True)
+    return save_dir
+SAVE_PATH = get_save_dir() / "save_file.json"
+
+def save_game(data: dict) -> None:
+    tmp = SAVE_PATH.with_suffix(".json.tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+    os.replace(tmp, SAVE_PATH)
+
+def load_game(default: dict | None = None) -> dict:
+    try:
+        with open(SAVE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return default if default is not None else {}
 
 while running:
     dt = clock.get_time() / 1000.0
