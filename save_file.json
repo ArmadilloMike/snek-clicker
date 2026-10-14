@@ -1,5 +1,9 @@
 {
   "scales": 10,
   "click_amount": 2,
-  "auto_click": 0.4
+  "auto_click": 0.4,
+  "bought_times": {
+    "1": 2,
+    "2": 1
+  }
 }
