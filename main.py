@@ -100,6 +100,8 @@ def draw_scale(surface, gold, x, y):
     return rect
 
 # shop items
+SAVE_GAME_EVENT = pygame.USEREVENT + 3
+pygame.time.set_timer(SAVE_GAME_EVENT, 10000)
 add_shop_item("+1 cp", 50, 2,)
 add_shop_item("+1 auto click", 1, 10)
 add_shop_item("times 2 cp", 100, 1)
@@ -214,6 +216,9 @@ while running:
             if golden >= since:
                 golden = 0
             schedule_scale_spawn()
+        # save
+        if event.type == SAVE_GAME_EVENT:
+            print("game saved (not really)")
 
     # create background
     background = pygame.Surface(screen.get_size())
