@@ -132,6 +132,38 @@ def load_game(default: dict | None = None) -> dict:
     except (FileNotFoundError, json.JSONDecodeError):
         return default if default is not None else {}
 
+def extract_save_values(state: dict) -> dict:
+    scales = state.get("scales", 0)
+    click_amount = state.get("click_amount", 1)
+    auto_click = state.get("auto_click", 0.0)
+
+    if not isinstance(scales, (int, float)):
+        scales = 0
+    if not isinstance(click_amount, (int, float)):
+        click_amount = 1
+    if not isinstance(auto_click, (int, float)):
+        auto_click = 0.0
+
+    raw_bought = state.get("bought_times", {})
+    if not isinstance(raw_bought, dict):
+        raw_bought = {}
+
+    bought_times = {}
+    for key, count in raw_bought.items():
+        try:
+            item_id = int(key)
+        except (ValueError, TypeError):
+            continue
+        if isinstance(count, int) and count > 0:
+            bought_times[item_id] = count
+
+    return {
+        "scales": scales,
+        "click_amount": click_amount,
+        "auto_click": auto_click,
+        "bought_times": bought_times
+    }
+
 while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
