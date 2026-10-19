@@ -186,6 +186,37 @@ def apply_bought_times(click_amount, auto_click, bought_items):
             click_amount *= 2 ** count
     return click_amount, auto_click
 
+def rebuild_shop_from_bought_times(bought_times):
+    global shop_items, last_used_id
+
+    # reset the shop to a clean state
+    shop_items = []
+    last_used_id = 0
+
+    item_defs = [
+        {"id": 1, "name": "+1 cp", "cost": 50, "uses": 2},
+        {"id": 2, "name": "+1 auto click", "cost": 1, "uses": 10},
+        {"id": 3, "name": "times 2 cp", "cost": 100, "uses": 1},
+    ]
+
+    for item_def in item_defs:
+        bought = bought_times.get(item_def["id"], 0)
+        remaining_uses = item_def["uses"] - bought
+
+        if remaining_uses <= 0:
+            continue
+
+        y = SHOP_START_Y + len(shop_items) * (ITEM_H + ITEM_GAP)
+        rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
+        shop_items.append({
+            "name": item_def["name"],
+            "cost": item_def["cost"],
+            "uses": remaining_uses,
+            "id": item_def["id"],
+            "rect": rect,
+        })
+        last_used_id = max(last_used_id, item_def["id"])
+
 while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
