@@ -217,6 +217,18 @@ def rebuild_shop_from_bought_times(bought_times):
         })
         last_used_id = max(last_used_id, item_def["id"])
 
+data = load_game()
+save_data = extract_save_values(data)
+
+scales = save_data["scales"]
+bought_times = save_data["bought_times"]
+
+# rebuild the actual state from the saved purchased counts
+click_amount = 1
+auto_click = 0.0
+click_amount, auto_click = apply_bought_times(click_amount, auto_click, bought_times)
+rebuild_shop_from_bought_times(bought_times)
+
 while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
