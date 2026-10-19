@@ -175,6 +175,17 @@ def build_save_file(scales, click_amount, auto_click, bought_times) -> dict:
         "bought_times": {str(k): v for k, v in bought_times.items() if v > 0}
     }
 
+def apply_bought_times(click_amount, auto_click, bought_items):
+    for item_id, count in bought_times.items():
+        if item_id == 1:
+            click_amount += count
+        elif item_id == 2:
+            auto_click += 0.1 * count
+            auto_click = round(auto_click, 1)
+        elif item_id == 3:
+            click_amount *= 2 ** count
+    return click_amount, auto_click
+
 while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
