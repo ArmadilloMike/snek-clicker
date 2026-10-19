@@ -175,7 +175,7 @@ def build_save_file(scales, click_amount, auto_click, bought_times) -> dict:
         "bought_times": {str(k): v for k, v in bought_times.items() if v > 0}
     }
 
-def apply_bought_times(click_amount, auto_click, bought_items):
+def apply_bought_times(click_amount, auto_click, bought_times):
     for item_id, count in bought_times.items():
         if item_id == 1:
             click_amount += count
