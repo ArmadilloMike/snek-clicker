@@ -17,6 +17,7 @@ GAME_NAME = "snek-clicker"
 # game info
 scales = 0
 click_amount = 1
+bought_times = {}
 
 # Shop stuff
 SHOP_X = 850
@@ -209,6 +210,8 @@ while running:
                     auto_click = round(auto_click, 1)
                 elif item["id"] == 3:
                     click_amount *= 2
+
+                bought_times[item["id"]] = bought_times.get(item["id"], 0) + 1
         # autoclicking things
         if event.type == AUTO_CLICK_EVENT:
             scales += auto_click
@@ -226,7 +229,8 @@ while running:
             schedule_scale_spawn()
         # save
         if event.type == SAVE_GAME_EVENT:
-            print("game saved (not really)")
+            data = build_save_file(scales, click_amount, auto_click, bought_times)
+            save_game(data)
 
     # create background
     background = pygame.Surface(screen.get_size())
