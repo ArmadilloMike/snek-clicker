@@ -66,7 +66,7 @@ def get_bonus_spawn():
         if not SNEK_RECT.colliderect(bonus_rect):
             return x, y
 def schedule_scale_spawn():
-    delay = random.randint(2000, 6000)
+    delay = random.randint(20000, 60000)
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
 
 # ghost snek things
