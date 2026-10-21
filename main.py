@@ -9,11 +9,16 @@ import random
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
+pygame.display.set_caption("Snek Clicker")
 clock = pygame.time.Clock()
 running = True
 font = pygame.font.Font(None, 64)
 GAME_NAME = "snek-clicker"
 
+# icon
+icon_path = Path(__file__).resolve().parent / "assets" / "snek.ico"
+icon = pygame.image.load(icon_path).convert_alpha()
+pygame.display.set_icon(pygame.transform.smoothscale(icon, (32,32)))
 # sprites
 SNEK_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "snek.png"
 snek_image = pygame.image.load(SNEK_SPRITE_PATH).convert_alpha()
