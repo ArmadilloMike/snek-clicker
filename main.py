@@ -14,6 +14,11 @@ running = True
 font = pygame.font.Font(None, 64)
 GAME_NAME = "snek-clicker"
 
+# sprites
+SNEK_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "snek.png"
+snek_image = pygame.image.load(SNEK_SPRITE_PATH).convert_alpha()
+snek_image = pygame.transform.scale(snek_image, (200,200))
+
 # game info
 scales = 0
 click_amount = 1
@@ -65,8 +70,8 @@ schedule_scale_spawn()
 
 # draw functions
 def draw_snek(surface):
-    pygame.draw.rect(surface, (50, 200, 100), pygame.Rect(300, 220, 40, 40))
-    return pygame.Rect(300,220,40,40)
+    surface.blit(snek_image, (300, 220))
+    return pygame.Rect(300,220, snek_image.get_width(), snek_image.get_height())
 def draw_text(screen, font):
     if pygame.font:
         text = font.render(f"Scales: {scales} - CP: {click_amount} - Auto Click: {auto_click}", True, (0,0,0))
