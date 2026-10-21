@@ -52,6 +52,19 @@ BONUS_MIN_X = 0
 BONUS_MAX_X = SHOP_X - BONUS_SIZE
 BONUS_MIN_Y = 60
 BONUS_MAX_Y = 720 - BONUS_SIZE
+SNEK_X = 300
+SNEK_Y = 220
+SNEK_W = 200
+SNEK_H = 200
+SNEK_RECT = pygame.Rect(SNEK_X, SNEK_Y, SNEK_W, SNEK_H)
+def get_bonus_spawn():
+    while True:
+        x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
+        y = random.randint(BONUS_MIN_Y, BONUS_MAX_Y)
+        bonus_rect = pygame.Rect(x, y, BONUS_SIZE, BONUS_SIZE)
+
+        if not SNEK_RECT.colliderect(bonus_rect):
+            return x, y
 def schedule_scale_spawn():
     delay = random.randint(2000, 6000)
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
@@ -282,10 +295,9 @@ while running:
             scales = round(scales, 1)
         # scale
         if event.type == SPAWN_BONUS_SCALE:
-            scale_x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
-            scale_y = random.randint(BONUS_MIN_Y, BONUS_MAX_Y)
+            x, y = get_bonus_spawn()
             gold = golden == 5
-            bonus_scales.append({"rect": pygame.Rect(scale_x, scale_y, 40, 40), "gold": gold, "expires_at": pygame.time.get_ticks() + BONUS_SCALE_LIFETIME})
+            bonus_scales.append({"rect": pygame.Rect(x, y, BONUS_SIZE, BONUS_SIZE), "gold": gold, "expires_at": pygame.time.get_ticks() + BONUS_SCALE_LIFETIME})
             golden += 1
             since = randint(5,10)
             if golden >= since:
