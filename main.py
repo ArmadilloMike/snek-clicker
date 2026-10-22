@@ -43,6 +43,8 @@ AUTO_CLICK_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 
 # bonus stuff
+GOLDEN_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "scale_gold.png"
+SCALE_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "scale.png"
 golden = 0
 SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
 bonus_scales = []
@@ -57,6 +59,10 @@ SNEK_Y = 220
 SNEK_W = 200
 SNEK_H = 200
 SNEK_RECT = pygame.Rect(SNEK_X, SNEK_Y, SNEK_W, SNEK_H)
+golden_scale_image = pygame.image.load(GOLDEN_SPRITE_PATH).convert_alpha()
+golden_scale_image = pygame.transform.scale(golden_scale_image, (BONUS_SIZE, BONUS_SIZE))
+scale_image = pygame.image.load(SCALE_SPRITE_PATH).convert_alpha()
+scale_image = pygame.transform.scale(scale_image, (BONUS_SIZE, BONUS_SIZE))
 def get_bonus_spawn():
     while True:
         x = random.randint(BONUS_MIN_X, BONUS_MAX_X)
@@ -66,7 +72,7 @@ def get_bonus_spawn():
         if not SNEK_RECT.colliderect(bonus_rect):
             return x, y
 def schedule_scale_spawn():
-    delay = random.randint(20000, 60000)
+    delay = random.randint(200, 600)
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
 
 # ghost snek things
@@ -119,9 +125,12 @@ def update_shop():
         y = SHOP_START_Y + index * (ITEM_H + ITEM_GAP)
         item["rect"].y = y
 def draw_scale(surface, gold, x, y):
-    rect = pygame.Rect(x, y, 40, 40)
-    color = (190, 210, 15) if gold else (40, 125, 5)
-    pygame.draw.rect(surface, color, rect)
+    surface.blit(scale_image, (x, y))
+    rect = pygame.Rect(x, y, BONUS_SIZE, BONUS_SIZE)
+    if gold:
+        surface.blit(golden_scale_image, (x, y))
+    else:
+        surface.blit(scale_image, (x, y))
     return rect
 
 # shop items
