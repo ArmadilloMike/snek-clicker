@@ -262,8 +262,8 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and snek.collidepoint(event.pos):
                 scales += click_amount
-                spawng = random.randint(1,20)
-                if spawng == random.randint(1, 20):
+                spawng = random.randint(1,10)
+                if spawng == random.randint(1, 10):
                     spawn_ghost(randint(min_x, max_x), randint(min_y, max_y), randint(40, 100), randint(15, 30))
 
             for bonus in list(bonus_scales):
