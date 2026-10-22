@@ -28,6 +28,7 @@ snek_image = pygame.transform.scale(snek_image, (200,200))
 scales = 0
 click_amount = 1
 bought_times = {}
+item_defs = []
 
 # Shop stuff
 SHOP_X = 850
@@ -108,7 +109,8 @@ def add_shop_item(name, cost, uses):
     rect = pygame.Rect(SHOP_X, y, ITEM_W, ITEM_H)
     id = last_used_id + 1
     last_used_id += 1
-    shop_items.append({"name": name, "cost": cost, "rect": rect, "uses": uses, "id": id})
+    shop_items.append({"id": id, "name": name, "cost": cost, "rect": rect, "uses": uses})
+    item_defs.append({"id": id, "name": name, "cost": cost, "uses": uses})
 def draw_shop(surface, font):
     for item in shop_items:
         color = (80,160,255)
@@ -136,9 +138,9 @@ def draw_scale(surface, gold, x, y):
 # shop items
 SAVE_GAME_EVENT = pygame.USEREVENT + 3
 pygame.time.set_timer(SAVE_GAME_EVENT, 10000)
-add_shop_item("+1 cp", 50, 2,)
-add_shop_item("+1 auto click", 1, 10)
-add_shop_item("times 2 cp", 100, 1)
+add_shop_item("+1 Click Power", 5, 5)
+add_shop_item("+0.1 Auto Click", 10, 10)
+add_shop_item("2x Click Power", 100, 2)
 
 snek = draw_snek(screen)
 
@@ -225,12 +227,7 @@ def rebuild_shop_from_bought_times(bought_times):
     # reset the shop to a clean state
     shop_items = []
     last_used_id = 0
-
-    item_defs = [
-        {"id": 1, "name": "+1 cp", "cost": 50, "uses": 2},
-        {"id": 2, "name": "+1 auto click", "cost": 1, "uses": 10},
-        {"id": 3, "name": "times 2 cp", "cost": 100, "uses": 1},
-    ]
+    global item_defs
 
     for item_def in item_defs:
         bought = bought_times.get(item_def["id"], 0)
