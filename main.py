@@ -70,6 +70,7 @@ def schedule_scale_spawn():
     pygame.time.set_timer(SPAWN_BONUS_SCALE, delay)
 
 # ghost snek things
+ghost_image = pygame.image.load(SNEK_SPRITE_PATH).convert_alpha()
 ghost_sneks = []
 min_x = 0
 max_x = SHOP_X - 1
@@ -79,9 +80,9 @@ max_y = 719
 def spawn_ghost(x=300, y=220, speed=30, size=30):
     ghost_sneks.append({"x": float(x), "y": float(y), "speed": float(speed), "size": int(size)})
 def draw_ghost_snek(surface, x, y, size=30):
-    ghost_surface = pygame.Surface((30, 30), pygame.SRCALPHA)
-    pygame.draw.rect(ghost_surface, (180, 255, 200, 100), pygame.Rect(0, 0, 30, 30))
-    surface.blit(ghost_surface, (int(x), int(y)))
+    ghost_sprite = pygame.transform.smoothscale(ghost_image, (size, size))
+    ghost_sprite.set_alpha(180)
+    surface.blit(ghost_sprite, (int(x), int(y)))
     return pygame.Rect(int(x), int(y), size, size)
 
 schedule_scale_spawn()
