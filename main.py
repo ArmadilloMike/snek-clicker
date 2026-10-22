@@ -263,6 +263,8 @@ while running:
     dt = clock.get_time() / 1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            data = build_save_file(scales, click_amount, auto_click, bought_times)
+            save_game(data)
             running = False
         # check if mouse clicked on a shop item or the snek
         if event.type == pygame.MOUSEBUTTONDOWN:
