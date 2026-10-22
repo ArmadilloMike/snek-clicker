@@ -277,8 +277,12 @@ while running:
 
             for bonus in list(bonus_scales):
                 if bonus["rect"].collidepoint(event.pos):
-                    if bonus["gold"]: scales += 50
-                    else: scales += 20
+                    if bonus["gold"]:
+                        amount = random.randint(40, 80)
+                        scales += amount
+                    else:
+                        amount = random.randint(10,30)
+                        scales += amount
                     bonus_scales.remove(bonus)
 
             item = get_click_item(event.pos)
