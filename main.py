@@ -307,6 +307,18 @@ while running:
                     auto_click = round(auto_click, 1)
                 elif item["id"] == 3:
                     click_amount *= 2
+                elif item["id"] == 4:
+                    auto_click += 1
+                    auto_click = round(auto_click, 1)
+                elif item["id"] == 5:
+                    click_amount += 5
+                elif item["id"] == 6:
+                    auto_click = auto_click * 3
+                    auto_click = round(auto_click, 1)
+                elif item["id"] == 7:
+                    click_amount += 10
+                elif item["id"] == 8:
+                    click_amount = click_amount * 4
 
                 bought_times[item["id"]] = bought_times.get(item["id"], 0) + 1
         # autoclicking things
