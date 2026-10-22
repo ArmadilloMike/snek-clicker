@@ -141,6 +141,11 @@ pygame.time.set_timer(SAVE_GAME_EVENT, 10000)
 add_shop_item("+1 Click Power", 5, 5)
 add_shop_item("+0.1 Auto Click", 10, 10)
 add_shop_item("2x Click Power", 100, 2)
+add_shop_item("+1 Auto Click", 150, 15)
+add_shop_item("+5 Click Power", 200, 10)
+add_shop_item("3x Auto Click", 500, 3)
+add_shop_item("+10 Click Power", 300, 5)
+add_shop_item("4x Click Power", 400, 2)
 
 snek = draw_snek(screen)
 
