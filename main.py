@@ -292,6 +292,7 @@ while running:
             item = get_click_item(event.pos)
             if item and scales >= item["cost"]:
                 scales -= item["cost"]
+                scales = round(scales, 1)
 
                 # item usage
                 item["uses"] -= 1
