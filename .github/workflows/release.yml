@@ -1,0 +1,57 @@
+name: Release Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: snek-clicker-win.exe
+            build: |
+              pyinstaller --onefile --noconsole --icon=assets/snek.ico --add-data "assets;assets" main.py
+              Copy-Item .\dist\main.exe .\snek-clicker-win.exe
+
+          - os: macos-latest
+            artifact: snek-clicker-macos
+            build: |
+              pyinstaller --onefile --windowed --icon=assets/snek.ico --add-data "assets:assets" main.py
+              cp dist/main snek-clicker-macos
+
+          - os: ubuntu-latest
+            artifact: snek-clicker-linux
+            build: |
+              pyinstaller --onefile --noconsole --icon=assets/snek.ico --add-data "assets:assets" main.py
+              cp dist/main snek-clicker-linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install pygame pyinstaller
+
+      - name: Build single-file app
+        shell: bash
+        run: ${{ matrix.build }}
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
