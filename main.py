@@ -34,6 +34,7 @@ click_amount = 1
 bought_times = {}
 item_defs = []
 win_scales_amount = 10
+game_won = False
 
 # Shop stuff
 SHOP_X = 800
@@ -147,7 +148,7 @@ def draw_congratulations():
     title_font = pygame.font.Font(None, 90)
     text_font = pygame.font.Font(None, 40)
 
-    title = title_font.render("Congratulations!", True, (255, 215, 0))
+    title = title_font.render("You Win!", True, (255, 215, 0))
     subtitle = text_font.render("Close the game to reset your progress", True, (255, 255, 255))
 
     screen.blit(title, title.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 30)))
@@ -299,6 +300,9 @@ while running:
             data = build_save_file(scales, click_amount, auto_click, bought_times)
             save_game(data)
             running = False
+
+        if game_won:
+            continue
         # check if mouse clicked on a shop item or the snek
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and snek.collidepoint(event.pos):
@@ -369,6 +373,12 @@ while running:
             data = build_save_file(scales, click_amount, auto_click, bought_times)
             save_game(data)
 
+    if game_won:
+        draw_congratulations()
+        pygame.display.flip()
+        clock.tick(60)
+        continue
+
     # create background
     background = pygame.Surface(screen.get_size())
     background = background.convert()
@@ -397,10 +407,11 @@ while running:
         draw_ghost_snek(screen, ghost['x'], ghost['y'], ghost['size'])
 
     if scales >= win_scales_amount:
-        draw_congratulations()
-        pygame.display.flip()
+        game_won = True
         save_enabled = False
         clear_save()
+        draw_congratulations()
+        pygame.display.flip()
         continue
 
     pygame.display.flip()
