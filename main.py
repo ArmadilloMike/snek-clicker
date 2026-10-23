@@ -6,6 +6,10 @@ from random import randint
 import pygame
 import random
 
+def resource_path(relative_path: str) -> Path:
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+    return Path(__file__).resolve().parent / relative_path
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -16,11 +20,11 @@ font = pygame.font.Font(None, 64)
 GAME_NAME = "snek-clicker"
 
 # icon
-icon_path = Path(__file__).resolve().parent / "assets" / "snek.ico"
+icon_path = resource_path("assets/snek.ico")
 icon = pygame.image.load(icon_path).convert_alpha()
 pygame.display.set_icon(pygame.transform.smoothscale(icon, (32,32)))
 # sprites
-SNEK_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "snek.png"
+SNEK_SPRITE_PATH = resource_path("assets/snek.png")
 snek_image = pygame.image.load(SNEK_SPRITE_PATH).convert_alpha()
 snek_image = pygame.transform.scale(snek_image, (200,200))
 
@@ -44,8 +48,8 @@ AUTO_CLICK_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(AUTO_CLICK_EVENT, 1000)
 
 # bonus stuff
-GOLDEN_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "scale_gold.png"
-SCALE_SPRITE_PATH = Path(__file__).resolve().parent / "assets" / "scale.png"
+GOLDEN_SPRITE_PATH = resource_path("assets/scale_gold.png")
+SCALE_SPRITE_PATH = resource_path("assets/scale.png")
 golden = 0
 SPAWN_BONUS_SCALE = pygame.USEREVENT + 2
 bonus_scales = []
