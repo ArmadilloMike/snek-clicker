@@ -31,9 +31,9 @@ bought_times = {}
 item_defs = []
 
 # Shop stuff
-SHOP_X = 850
+SHOP_X = 800
 SHOP_START_Y = 100
-ITEM_W, ITEM_H = 400, 50
+ITEM_W, ITEM_H = 470, 50
 ITEM_GAP = 10
 last_used_id = 0
 shop_items = []
