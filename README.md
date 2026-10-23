@@ -9,11 +9,26 @@ I made this game using Python & Pygame
 
 The art was designed in LibreSprite.
 
+![screenhot of the game](https://cdn.hackclub.com/01a16a05-50c8-7773-9a8d-bb4988c4cf66/Screenshot%202026-10-23%20132759.png)
+
 ## How to run
 
-1. Download the release for your OS from the releases tab. 
+1. Download the release for your OS from the [releases tab](https://github.com/ArmadilloMike/snek-clicker/releases). 
 2. Open the file
 3. Play the game
+
+## How to play
+
+TL;DR: Click the snek, buy stuff from shop, get a ton of scales
+
+To start playing the game you have to click the green snek on the left of the screen.
+
+Once you have enough scales (points) you can buy stuff rom the shop
+
+Some things you can buy are increases to your click power
+ and increases to auto clicking
+
+To win the game you have to get to 100 million points
 
 ## Setup with uv
 
@@ -30,14 +45,3 @@ uv sync --group dev
 ```shell
 uv run python main.py
 ```
-
-what should be in a readme?
-readmes should include:
-
-information about your project, what is it, what does it do, etc.
-your tech stack (what programs / frameworks / languages were used in this project)
-information about how it was made, problems you had to fix, etc.
-how to run the project! development instructions, links to dependencies, etc.
-demo links to your projects so people can try it out without having to download things
-screenshots screenshots screenshots! show off the coolest and most interesting parts of your project
-disclosure on how much ai was used and for what
