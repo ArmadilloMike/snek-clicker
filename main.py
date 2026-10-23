@@ -33,6 +33,7 @@ scales = 0
 click_amount = 1
 bought_times = {}
 item_defs = []
+win_scales_amount = 10
 
 # Shop stuff
 SHOP_X = 800
@@ -138,9 +139,23 @@ def draw_scale(surface, gold, x, y):
     else:
         surface.blit(scale_image, (x, y))
     return rect
+def draw_congratulations():
+    overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
+    overlay.fill((0,0,0,180))
+    screen.blit(overlay, (0,0))
+
+    title_font = pygame.font.Font(None, 90)
+    text_font = pygame.font.Font(None, 40)
+
+    title = title_font.render("Congratulations!", True, (255, 215, 0))
+    subtitle = text_font.render("Close the game to reset your progress", True, (255, 255, 255))
+
+    screen.blit(title, title.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 30)))
+    screen.blit(subtitle, subtitle.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 40)))
 
 # shop items
 SAVE_GAME_EVENT = pygame.USEREVENT + 3
+save_enabled = True
 pygame.time.set_timer(SAVE_GAME_EVENT, 10000)
 add_shop_item("+1 Click Power", 5, 5) #1
 add_shop_item("+0.1 Auto Click", 10, 10) #2
@@ -256,6 +271,15 @@ def rebuild_shop_from_bought_times(bought_times):
         })
         last_used_id = max(last_used_id, item_def["id"])
 
+def clear_save():
+    data = {
+        "scales": 0,
+        "click_amount": 1,
+        "auto_click": 0,
+        "bought_times": {}
+    }
+    save_game(data)
+
 data = load_game()
 save_data = extract_save_values(data)
 
@@ -341,7 +365,7 @@ while running:
                 golden = 0
             schedule_scale_spawn()
         # save
-        if event.type == SAVE_GAME_EVENT:
+        if event.type == SAVE_GAME_EVENT and save_enabled:
             data = build_save_file(scales, click_amount, auto_click, bought_times)
             save_game(data)
 
@@ -371,6 +395,13 @@ while running:
             ghost_sneks.remove(ghost)
     for ghost in ghost_sneks:
         draw_ghost_snek(screen, ghost['x'], ghost['y'], ghost['size'])
+
+    if scales >= win_scales_amount:
+        draw_congratulations()
+        pygame.display.flip()
+        save_enabled = False
+        clear_save()
+        continue
 
     pygame.display.flip()
     clock.tick(60)
