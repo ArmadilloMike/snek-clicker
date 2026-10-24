@@ -33,7 +33,7 @@ scales = 0
 click_amount = 1
 bought_times = {}
 item_defs = []
-win_scales_amount = 10
+win_scales_amount = 100000000
 game_won = False
 
 # Shop stuff
